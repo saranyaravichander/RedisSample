@@ -11,6 +11,7 @@ namespace RedisSample
 {
     public partial class _Default : Page
     {
+        /// 1. Inmemory database
         static Dictionary<string, string> database = new Dictionary<string, string>
         {
             { "key1","answer1" },
@@ -47,12 +48,14 @@ namespace RedisSample
             if (database.ContainsKey(TextBox1.Text))
             {
 
+                /// 1. Check if value is not present in Cache. In that case read from database, and update cache as well
+
                if (cachedValue == RedisValue.EmptyString || cachedValue == RedisValue.Null)
                 {
                     Label1.Text = "Result : " + database[TextBox1.Text] + " || Got from the database";
                     cache.StringSet(TextBox1.Text, database[TextBox1.Text]);
                 }
-                else
+                else /// 2. If present in cache pick from it
                 {
                     Label1.Text = "Result : " + cache.StringGet(TextBox1.Text).ToString() + " || Got from the cache";
                 }
